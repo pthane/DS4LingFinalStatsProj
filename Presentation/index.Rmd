@@ -1,0 +1,468 @@
+---
+title: "Morphological and Lexical Effects and Preterit Aspect Morphology with States"
+subtitle: "Final Project, Data Science for Linguists"
+author: "Patrick D. Thane"
+institute: "Rutgers University"
+date: "April 29, 2021"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["rutgers", "rutgers-fonts"]
+    nature:
+      beforeInit: "http://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r setup, echo = FALSE, include = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+options(scipen = 999)
+
+library(tidyverse)
+library(base)
+library(lme4)
+library(knitr)
+library(kableExtra)
+library(ds4ling)
+library(xaringan)
+library(patchwork)
+library(jtools)
+library(sjPlot)
+library(sjlabelled)
+library(sjmisc)
+```
+
+```{r, load-dataframes}
+HS_EPT <- read_csv("../Tidy Data/Heritage EPT Preterit Data.csv")
+HS_FCT <- read_csv("../Tidy Data/Heritage FCT Preterit Data.csv")
+HS_Composite <- read_csv("../Tidy Data/Heritage Aggregate Preterit Data.csv")
+```
+
+```{r, generate-verb-averages}
+HS_EPT_Modified = aggregate(HS_EPT$Response, list(HS_EPT$MainVerb), FUN = mean, na.rm = TRUE)
+HS_EPT_Modified = HS_EPT_Modified %>% rename(Verb_Avg = x)
+HS_EPT_Modified = left_join(HS_EPT, HS_EPT_Modified, by = c("MainVerb" = "Group.1"))
+
+HS_FCT_Modified = aggregate(HS_FCT$Response, list(HS_FCT$MainVerb), FUN = mean, na.rm = TRUE)
+HS_FCT_Modified = HS_FCT_Modified %>% rename(Verb_Avg = x)
+HS_FCT_Modified = left_join(HS_FCT, HS_FCT_Modified, by = c("MainVerb" = "Group.1"))
+```
+
+```{r, generate-prof-averages}
+EPT_Proficiency = aggregate(HS_EPT$Response, list(HS_EPT$Participant_ID), FUN = mean, na.rm = TRUE)
+EPT_Proficiency = EPT_Proficiency %>% rename(Part_Avg = x)
+EPT_Proficiency = left_join(HS_EPT, EPT_Proficiency, by = c("Participant_ID" = "Group.1"))
+
+FCT_Proficiency = aggregate(HS_FCT$Response, list(HS_FCT$Participant_ID), FUN = mean, na.rm = TRUE)
+FCT_Proficiency = FCT_Proficiency %>% rename(Part_Avg = x)
+FCT_Proficiency = left_join(HS_FCT, FCT_Proficiency, by = c("Participant_ID" = "Group.1"))
+```
+
+```{r, rebind-verbavg-dataframes}
+Preterit_Aggregate = rbind(HS_EPT_Modified, HS_FCT_Modified)
+
+Preterit_Aggregate$Modality <- factor(Preterit_Aggregate$Modality,
+                                             levels = c("Production", "Interpretation"))
+Preterit_Proficiency <- rbind(EPT_Proficiency, FCT_Proficiency)
+
+Preterit_Proficiency$Modality <- factor(Preterit_Proficiency$Modality,
+                                           levels = c("Production", "Interpretation"))
+```
+
+# Background
+
+--
+- Use of preterit morphology with states is the part of Spanish morphological aspect first to be restructured (e.g., Montrul, 2002; Silva-Corvalán, 1994)
+
+
+--
+- It appears that lexical frequency (prevalence of individual forms in the input) affects heritage bilinguals (HB) in the use of morphosyntax (e.g., Giancaspro, 2020; Hur et al., 2020)
+
+
+--
+- Production is more affected by lexical factors than comprehension (Perez-Cortes et al., 2019)
+
+
+---
+# Research Questions and Hypotheses
+
+--
+- **(1)** Do HB select more instances of preterit morphology with state verbs in a receptive task than they produce these forms?
+
+
+--
+HB will select the preterit with states in a receptive measure more than they will produce this form, implying a task effect.
+
+
+--
+- **(2)** Does lexical frequency affect HBs' production and selection of preterit morphology with state verbs?
+
+
+--
+Token frequency will affect HB, in both the production task and the receptive measure.  The impact on production will be larger than on comprehension.
+
+--
+- **(3)** Do proficiency and morphological regularity also influence the selection of preterit with state verbs?
+
+
+--
+More-proficient HB will be less susceptible to the effects of regular frequency in both tasks.  Regular verbs will be less susceptible to frequency effects than irregular verbs in both tasks.
+
+
+---
+# The Study
+
+--
+- 47 HB of Spanish (age of acquisition of English between ages 0 and 7)
+
+
+--
+- **Elicited Production Task (EPT)**: 20 sentence fragments eliciting preterit morphology (30 distractors):
+
+--
+  + State verbs forced into perfectivity by *durante* or *entre*
+
+--
+  + Ten matrix verbs controlled for lexical frequency in Davies (2016) corpus
+
+--
+  + Five regular verbs, five irregular verbs
+
+
+--
+- **Forced Choice Task (FCT)**: 20 descriptions followed by binary choice (30 distractors):
+
+--
+  + Preterit or imperfect with state verbs following adverbials *durante* or *entre*
+
+--
+  + Minimal pairs (same sentences except for verbal inflections)
+
+
+--
+- Written cloze proficiency measure (Montrul & Slabakova, 2003)
+
+
+--
+- Biographical questionnaire (frequency of use and self-reported use of individual words)
+
+
+---
+# Models and Variables
+
+
+--
+- Three GLMMs:
+
+
+--
+  + Omnibus model for all data
+
+--
+  + Production task model
+
+--
+  + Interpretation task model
+
+
+--
+- Criterion: binary response (1 for preterit; 0 for other structures)
+
+
+--
+- Predictors:
+
+--
+  + Task (production vs. interpretation; omnibus only)
+
+--
+  + Lexical frequency (continuous; Davies, 2016)
+
+--
+  + Morphological regularity (binary)
+  
+--
+  + Proficiency score (continuous; 0-50)
+
+--
+  + All interactions between lexical frequency, morphological regularity, and proficiency
+
+
+--
+- Participant and item as random effects
+
+
+--
+- All numerical predictors were standardized
+
+---
+# Omnibus Model
+```{r, prep-omnibus-model}
+Omnibus_Model <- glmer(Response ~ Task + Token_Main_Std * Reg_Main * DELE_Std +
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HS_Composite,
+                 family = binomial)
+```
+
+```{r, create-omnibus-plot}
+Omnibus_Plot <- plot_model(Omnibus_Model, show.values = TRUE, value.offset = .3, show.intercept = TRUE, transform = NULL, vline.color = "black") +
+  scale_x_discrete(labels = c("LF : Reg : DELE", "Reg : DELE", "LF : Prof", "LF : Reg", "Proficiency (Prof)", "Regularity (Reg)", "Lexical Frequency (LF)", "Task", "Intercept")) +
+  labs(title = "Omnibus Model", y = "β Estimates") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 24, face = "bold"))
+```
+
+```{r, plot-omnibus-model, height = 10, fig.width = 16, fig.align = 'center', fig.retina = 2}
+(Omnibus_Plot)
+```
+
+---
+# Task-Specific Models
+```{r, create-HS-EPT-model}
+HS_EPT_Model <- glmer(Response ~ Token_Main_Std * Reg_Main * DELE_Std +
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HS_EPT,
+                 family = binomial)
+```
+
+```{r, create-HS-FCT-model}
+HS_FCT_Model <- glmer(Response ~ Token_Main_Std * Reg_Main * DELE_Std +
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HS_FCT,
+                 family = binomial)
+```
+
+```{r, create-HS-EPT-plot}
+HS_EPT_Plot <- plot_model(HS_EPT_Model, show.values = TRUE, value.offset = .3, show.intercept = TRUE, transform = NULL, vline.color = "black") +
+  scale_x_discrete(labels = c("LF : Reg : Prof", "Reg : Prof", "LF : Prof", "LF : Reg", "Proficiency (Prof)", "Regularity (Reg)", "Lexical Frequency (LF)", "Intercept")) +
+    labs(title = "Production (EPT)", y = "β Estimates") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 24, face = "bold"))
+```
+
+```{r, create-HS-FCT-plot}
+HS_FCT_Plot <- plot_model(HS_FCT_Model, show.values = TRUE, value.offset = .3, show.intercept = TRUE, transform = NULL, vline.color = "black") +
+  scale_x_discrete(labels = c("LF : Reg : Prof", "Reg : Prof", "LF : Prof", "LF : Reg", "Prof", "Reg", "LF", "INT")) +
+  labs(title = "Interpretation (FCT)", y = "β Estimates") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+    theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 24, face = "bold"))
+```
+
+```{r, print-EPT-plots, height = 10, fig.width = 16, fig.align = 'center', fig.retina = 2}
+(HS_EPT_Plot) + (HS_FCT_Plot)
+```
+
+---
+# Interpreting Frequency-Proficiency Interaction
+```{r, create-interaction-plot}
+Interaction_Plot <- plot_model(HS_EPT_Model,
+                               type = "pred",
+                               terms = c("Token_Main_Std", "DELE_Std [-2, 0, 2]"))
+```
+
+```{r, print-interaction-plot, height = 10, fig.width = 16, fig.align = 'center', fig.retina = 2}
+(Interaction_Plot)
+```
+
+---
+# Nested Model Comparisons for Production
+```{r, generate-NMC-omnibus}
+EPT_Null <- glmer(Response ~ 1 + 
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HS_EPT,
+                 family = binomial)
+
+EPT_TF <- glmer(Response ~ 1 + Token_Main_Std +
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HS_EPT,
+                 family = binomial)
+
+EPT_Reg <- glmer(Response ~ 1 + Token_Main_Std + Reg_Main +
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HS_EPT,
+                 family = binomial)
+
+EPT_DELE <- glmer(Response ~ 1 + Token_Main_Std + Reg_Main + DELE_Std +
+                    (1 | Participant_ID) + (1 | Item),
+                     data = HS_EPT,
+                     family = binomial)
+
+EPT_TF_Reg <- glmer(Response ~ 1 + Token_Main_Std + Reg_Main + DELE_Std + Token_Main_Std:Reg_Main +
+                    (1 | Participant_ID) + (1 | Item),
+                     data = HS_EPT,
+                     family = binomial)
+
+EPT_TF_DELE <- glmer(Response ~ 1 + Token_Main_Std + Reg_Main + DELE_Std + Token_Main_Std:Reg_Main + Token_Main_Std:DELE_Std +
+                    (1 | Participant_ID) + (1 | Item),
+                     data = HS_EPT,
+                     family = binomial)
+
+
+NMC_Output <- anova(EPT_Null, EPT_TF, EPT_Reg, EPT_DELE, EPT_TF_DELE, test = "Chisq")
+```
+
+```{r, generate-NMC-output}
+NMC_Output_Table <- as_tibble(NMC_Output) %>% 
+  rename(., Factors = "npar", Akaike = "AIC", Bayesian = "BIC", Likelihood = "logLik", Deviance = "deviance", Chisquare = "Chisq", DF = "Df", p = "Pr(>Chisq)") %>% 
+  add_column(Model = c("Intercept", "Token", "Regularity", "DELE", "Token:DELE"), .before = "Factors") %>% 
+  kable(align = "lcccccccc")
+```
+
+```{r, print-NMC-table, fig.align = 'center'}
+(NMC_Output_Table)
+```
+
+---
+# Summary
+
+--
+- **RQ1**: The effect for task supports the hypothesis that HB select preterit in a receptive measure more than they produce this form
+
+
+--
+- **RQ2**: There is an effect for lexical frequency in production only; however, the effect is negative, not positive
+
+
+--
+- **RQ3:** There is a relationship between proficiency level and sensitivity to frequency effects, but morphological regularity appeared not to modulate these effects
+
+
+--
+- **Proficiency** appears to be the only factor that accounts for variability in aspect selection
+
+
+---
+# Conclusions
+
+--
+- Additional evidence that lexical frequency affects heritage grammars
+
+
+--
+- Use of continuous data builds upon previous findings
+
+
+--
+- Distinction between production and comprehension (unique factors, different response rates)
+
+
+--
+- Possible default for preterit across classes, but state-imperfect relationship at high frequency levels
+
+
+--
+- Only highly-proficient HB overcome the "imperfect bias," and even then do not do so categorically
+
+---
+# Preterit by Lexical Item
+```{r, generate-LI-plot}
+Pret_LI <- Preterit_Aggregate %>%
+  ggplot(aes(x = MainVerb, y = Response, color = Reg_Main, shape = Modality)) + 
+  geom_hline(yintercept = 0.8, color = "white", size = 2) +
+  stat_summary(fun.data = mean_se,
+               geom = "pointrange", size = 1, 
+               position = position_dodge(width = 0.5)) + 
+  scale_color_brewer(palette = "Set1", name = "") +
+  scale_y_continuous(breaks = seq (0, 1, 0.2),
+                     limits = c(0, 1)) +
+  scale_x_discrete(labels = c("estar", "tener", "haber", "vivir", "gustar", "creer", "faltar", "amar", "doler", "excluir")) +
+  labs(x = "State verb (from most to least frequent)", y = "Proportion of preterit responses", color = "Task", 
+       title = "Preterit by State Verb, Task, and Regularity") +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 24, face = "bold"))
+```
+
+```{r, print-Pret-LI-plot, height = 10, fig.width = 16, fig.align = 'center', fig.retina = 2}
+(Pret_LI)
+```
+
+---
+# Preterit by Lexical Frequency
+```{r, generate-freq-plot}
+Freq_Plot <- Preterit_Aggregate %>%
+  ggplot(aes(x = log(Token_Main_Lemma), y = Verb_Avg, color = Modality)) + 
+  geom_point() +
+  geom_smooth(method = glm) +
+  scale_y_continuous(breaks = seq (0, 1, 0.2),
+                     limits = c(0, 1)) +
+  labs(x = "Log-transformed lexical frequency in Davies (2016)", y = "Proportion of preterit responses", color = "Task", 
+       title = "Preterit by Lexical Frequency and Task") +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 24, face = "bold"))
+```
+
+```{r, print-freq-plot, height = 10, fig.width = 16, fig.align = 'center', fig.retina = 2}
+(Freq_Plot)
+```
+
+---
+# Preterit by Morphological Regularity
+```{r, create-reg-plot}
+RegPlot <- Preterit_Aggregate %>%
+  ggplot(aes(x = Modality, y = Response, color = Modality)) + 
+  geom_hline(yintercept = 0.8, color = "white", size = 2) + 
+  facet_grid(cols = vars(Reg_Main)) +
+  stat_summary(fun.data = mean_se,
+               geom = "pointrange", size = 1, 
+               position = position_dodge(width = 0.5)) + 
+  scale_color_brewer(palette = "Set1", name = "") +
+  scale_y_continuous(breaks = seq (0, 1, 0.2),
+                     limits = c(0, 1)) +
+  labs(x = "Morphological regularity", y = "Proportion of preterit responses", color = "Task", 
+       title = "Morphological Regularity and Preterit Use") +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 24, face = "bold"))
+```
+
+```{r, print-reg-plot, height = 10, fig.width = 16, fig.align = 'center', fig.retina = 2}
+(RegPlot)
+```
+
+---
+# Preterit by Proficiency
+```{r, generate-prof-plot}
+Prof_Plot <-  Preterit_Proficiency %>% 
+  ggplot(aes(x = DELE, y = Part_Avg)) + 
+  geom_point() +
+  geom_smooth(method = glm) +
+  facet_grid(cols = vars(Modality)) +
+  scale_y_continuous(breaks = seq (0, 1, 0.2),
+                     limits = c(0, 1)) +
+  labs(x = "DELE Proficiency Score", y = "Proportion of preterit responses by participant", color = "Lexical Frequency", 
+       title = "Proportion of Preterit by Task and Profociency") +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 24, face = "bold"))
+```
+
+```{r, print-prof-plot, height = 10, fig.width = 16, fig.align = 'center', fig.retina = 2}
+(Prof_Plot)
+```
+
+---
+# References
+
+Davies, M. (2016). Corpus del Español: Two billion words, 21 countries. Available online at http://www.corpusdelespanol.org/web-dial/ (Web/Dialects).
+
+Giancaspro, D. (2020). Not in the mood: Frequency effects in heritage speakers’ subjunctive knowledge. In B. Brehmer, J. Treffers-Daller, & D. Berndt (Eds.), *Lost in transmission* (pp. 71–97). Amsterdam: John Benjamins.
+
+Hur, E., López-Otero, J. C., & Sánchez, L. (2020). Gender agreement and assignment in Spanish heritage speakers: Does frequency matter? *Languages*, *5*(48), doi:10.3390/languages5040048.
+
+Montrul, S. (2002). Incomplete acquisition and attrition of Spanish tense/aspect distinctions in adult bilinguals. *Bilingualism: Language and Cognition*, *5*, 39–68.
+
+Montrul, S. & Slabakova, R. (2003). Competence similarities between native and near-native speakers. *Studies in Second Language Acquisition*, *25*(3), 351–398.
+
+Perez-Cortes, S., Putnam, M. & Sánchez, L. (2019). Differential access: Asymmetries in accessing features and building representations in heritage language grammars. *Languages*, *4*(81), 1-27.
+
+Silva-Corvalán, S. (1994). Language contact and change: Spanish in Los Angeles. Oxford: Clarendon Press.

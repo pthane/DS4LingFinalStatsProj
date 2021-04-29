@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Morphological and Lexical Effects and Preterit Aspect Morphology with States</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Patrick D. Thane" />
+    <meta name="date" content="2021-04-29" />
+    <script src="libs/header-attrs-2.7/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/rutgers.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rutgers-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Morphological and Lexical Effects and Preterit Aspect Morphology with States
+## Final Project, Data Science for Linguists
+### Patrick D. Thane
+### Rutgers University
+### April 29, 2021
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+# Background
+
+--
+- Use of preterit morphology with states is the part of Spanish morphological aspect first to be restructured (e.g., Montrul, 2002; Silva-Corvalán, 1994)
+
+
+--
+- It appears that lexical frequency (prevalence of individual forms in the input) affects heritage bilinguals (HB) in the use of morphosyntax (e.g., Giancaspro, 2020; Hur et al., 2020)
+
+
+--
+- Production is more affected by lexical factors than comprehension (Perez-Cortes et al., 2019)
+
+
+---
+# Research Questions and Hypotheses
+
+--
+- **(1)** Do HB select more instances of preterit morphology with state verbs in a receptive task than they produce these forms?
+
+
+--
+HB will select the preterit with states in a receptive measure more than they will produce this form, implying a task effect.
+
+
+--
+- **(2)** Does lexical frequency affect HBs' production and selection of preterit morphology with state verbs?
+
+
+--
+Token frequency will affect HB, in both the production task and the receptive measure.  The impact on production will be larger than on comprehension.
+
+--
+- **(3)** Do proficiency and morphological regularity also influence the selection of preterit with state verbs?
+
+
+--
+More-proficient HB will be less susceptible to the effects of regular frequency in both tasks.  Regular verbs will be less susceptible to frequency effects than irregular verbs in both tasks.
+
+
+---
+# The Study
+
+--
+- 47 HB of Spanish (age of acquisition of English between ages 0 and 7)
+
+
+--
+- **Elicited Production Task (EPT)**: 20 sentence fragments eliciting preterit morphology (30 distractors):
+
+--
+  + State verbs forced into perfectivity by *durante* or *entre*
+
+--
+  + Ten matrix verbs controlled for lexical frequency in Davies (2016) corpus
+
+--
+  + Five regular verbs, five irregular verbs
+
+
+--
+- **Forced Choice Task (FCT)**: 20 descriptions followed by binary choice (30 distractors):
+
+--
+  + Preterit or imperfect with state verbs following adverbials *durante* or *entre*
+
+--
+  + Minimal pairs (same sentences except for verbal inflections)
+
+
+--
+- Written cloze proficiency measure (Montrul &amp; Slabakova, 2003)
+
+
+--
+- Biographical questionnaire (frequency of use and self-reported use of individual words)
+
+
+---
+# Models and Variables
+
+
+--
+- Three GLMMs:
+
+
+--
+  + Omnibus model for all data
+
+--
+  + Production task model
+
+--
+  + Interpretation task model
+
+
+--
+- Criterion: binary response (1 for preterit; 0 for other structures)
+
+
+--
+- Predictors:
+
+--
+  + Task (production vs. interpretation; omnibus only)
+
+--
+  + Lexical frequency (continuous; Davies, 2016)
+
+--
+  + Morphological regularity (binary)
+  
+--
+  + Proficiency score (continuous; 0-50)
+
+--
+  + All interactions between lexical frequency, morphological regularity, and proficiency
+
+
+--
+- Participant and item as random effects
+
+
+--
+- All numerical predictors were standardized
+
+---
+# Omnibus Model
+
+
+
+
+&lt;img src="index_files/figure-html/plot-omnibus-model-1.png" width="1152" style="display: block; margin: auto;" /&gt;
+
+---
+# Task-Specific Models
+
+
+
+
+
+
+
+
+&lt;img src="index_files/figure-html/print-EPT-plots-1.png" width="1152" style="display: block; margin: auto;" /&gt;
+
+---
+# Interpreting Frequency-Proficiency Interaction
+
+
+&lt;img src="index_files/figure-html/print-interaction-plot-1.png" width="1152" style="display: block; margin: auto;" /&gt;
+
+---
+# Nested Model Comparisons for Production
+
+
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Model &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Factors &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Akaike &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Bayesian &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Likelihood &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Deviance &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Chisquare &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; DF &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; p &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Intercept &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1052.777 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1067.058 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -523.3883 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1046.777 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Token &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1049.419 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1068.461 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -520.7097 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1041.419 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5.3572857 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.0206359 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Regularity &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1048.515 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1072.317 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -519.2574 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1038.515 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2.9046074 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.0883268 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; DELE &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1050.515 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1079.077 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -519.2574 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1038.515 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.0000022 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.9988275 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Token:DELE &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1032.200 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1070.284 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -508.1002 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1016.200 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 22.3143016 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.0000143 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Summary
+
+--
+- **RQ1**: The effect for task supports the hypothesis that HB select preterit in a receptive measure more than they produce this form
+
+
+--
+- **RQ2**: There is an effect for lexical frequency in production only; however, the effect is negative, not positive
+
+
+--
+- **RQ3:** There is a relationship between proficiency level and sensitivity to frequency effects, but morphological regularity appeared not to modulate these effects
+
+
+--
+- **Proficiency** appears to be the only factor that accounts for variability in aspect selection
+
+
+---
+# Conclusions
+
+--
+- Additional evidence that lexical frequency affects heritage grammars
+
+
+--
+- Use of continuous data builds upon previous findings
+
+
+--
+- Distinction between production and comprehension (unique factors, different response rates)
+
+
+--
+- Possible default for preterit across classes, but state-imperfect relationship at high frequency levels
+
+
+--
+- Only highly-proficient HB overcome the "imperfect bias," and even then do not do so categorically
+
+---
+# Preterit by Lexical Item
+
+
+&lt;img src="index_files/figure-html/print-Pret-LI-plot-1.png" width="1152" style="display: block; margin: auto;" /&gt;
+
+---
+# Preterit by Lexical Frequency
+
+
+&lt;img src="index_files/figure-html/print-freq-plot-1.png" width="1152" style="display: block; margin: auto;" /&gt;
+
+---
+# Preterit by Morphological Regularity
+
+
+&lt;img src="index_files/figure-html/print-reg-plot-1.png" width="1152" style="display: block; margin: auto;" /&gt;
+
+---
+# Preterit by Proficiency
+
+
+&lt;img src="index_files/figure-html/print-prof-plot-1.png" width="1152" style="display: block; margin: auto;" /&gt;
+
+---
+# References
+
+Davies, M. (2016). Corpus del Español: Two billion words, 21 countries. Available online at http://www.corpusdelespanol.org/web-dial/ (Web/Dialects).
+
+Giancaspro, D. (2020). Not in the mood: Frequency effects in heritage speakers’ subjunctive knowledge. In B. Brehmer, J. Treffers-Daller, &amp; D. Berndt (Eds.), *Lost in transmission* (pp. 71–97). Amsterdam: John Benjamins.
+
+Hur, E., López-Otero, J. C., &amp; Sánchez, L. (2020). Gender agreement and assignment in Spanish heritage speakers: Does frequency matter? *Languages*, *5*(48), doi:10.3390/languages5040048.
+
+Montrul, S. (2002). Incomplete acquisition and attrition of Spanish tense/aspect distinctions in adult bilinguals. *Bilingualism: Language and Cognition*, *5*, 39–68.
+
+Montrul, S. &amp; Slabakova, R. (2003). Competence similarities between native and near-native speakers. *Studies in Second Language Acquisition*, *25*(3), 351–398.
+
+Perez-Cortes, S., Putnam, M. &amp; Sánchez, L. (2019). Differential access: Asymmetries in accessing features and building representations in heritage language grammars. *Languages*, *4*(81), 1-27.
+
+Silva-Corvalán, S. (1994). Language contact and change: Spanish in Los Angeles. Oxford: Clarendon Press.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="http://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
