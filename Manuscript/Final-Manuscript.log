@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.5.2)  4 MAY 2021 11:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.5.2)  4 MAY 2021 12:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -709,7 +709,7 @@ LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
 (/Users/Patrick/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [2] [3] [4] [5] [6] [7] [8]
-<Final-Manuscript_files/figure-latex/Pret-LI-graph-1.pdf, id=140, 469.755pt x 3
+<Final-Manuscript_files/figure-latex/Pret-LI-graph-1.pdf, id=136, 469.755pt x 3
 25.215pt>
 File: Final-Manuscript_files/figure-latex/Pret-LI-graph-1.pdf Graphic file (typ
 e pdf)
@@ -722,7 +722,7 @@ Overfull \hbox (28.90639pt too wide) in paragraph at lines 283--284
 [][]  
  []
 
-<Final-Manuscript_files/figure-latex/generate-prof-plot-1.pdf, id=141, 469.755p
+<Final-Manuscript_files/figure-latex/generate-prof-plot-1.pdf, id=137, 469.755p
 t x 325.215pt>
 File: Final-Manuscript_files/figure-latex/generate-prof-plot-1.pdf Graphic file
  (type pdf)
@@ -739,7 +739,7 @@ Overfull \hbox (28.90639pt too wide) in paragraph at lines 285--286
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [9 <./Final-Manuscript_files/figure-latex/Pret-LI-graph-1.pdf>]
-<Final-Manuscript_files/figure-latex/aggregate-model-1.pdf, id=152, 469.755pt x
+<Final-Manuscript_files/figure-latex/aggregate-model-1.pdf, id=148, 469.755pt x
  325.215pt>
 File: Final-Manuscript_files/figure-latex/aggregate-model-1.pdf Graphic file (t
 ype pdf)
@@ -753,7 +753,7 @@ Overfull \hbox (28.90639pt too wide) in paragraph at lines 297--298
  []
 
 [10 <./Final-Manuscript_files/figure-latex/generate-prof-plot-1.pdf>]
-<Final-Manuscript_files/figure-latex/HB-EPT-model-1.pdf, id=167, 469.755pt x 32
+<Final-Manuscript_files/figure-latex/HB-EPT-model-1.pdf, id=163, 469.755pt x 32
 5.215pt>
 File: Final-Manuscript_files/figure-latex/HB-EPT-model-1.pdf Graphic file (type
  pdf)
@@ -770,7 +770,7 @@ Overfull \hbox (28.90639pt too wide) in paragraph at lines 304--305
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [11 <./Final-Manuscript_files/figure-latex/aggregate-model-1.pdf>]
-<Final-Manuscript_files/figure-latex/HB-FCT-model-1.pdf, id=178, 469.755pt x 32
+<Final-Manuscript_files/figure-latex/HB-FCT-model-1.pdf, id=174, 469.755pt x 32
 5.215pt>
 File: Final-Manuscript_files/figure-latex/HB-FCT-model-1.pdf Graphic file (type
  pdf)
@@ -794,34 +794,16 @@ Overfull \hbox (28.45248pt too wide) in paragraph at lines 318--335
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[13 <./Final-Manuscript_files/figure-latex/HB-FCT-model-1.pdf>] [14]
-Overfull \hbox (47.4739pt too wide) in paragraph at lines 352--375
- [][] 
- []
-
-
-Overfull \hbox (49.43222pt too wide) in paragraph at lines 381--402
- [][] 
- []
-
-
-Overfull \hbox (43.55724pt too wide) in paragraph at lines 408--429
- [][] 
- []
-
-[15]
-Underfull \vbox (badness 1259) has occurred while \output is active []
-
-[16] [17] AED endfloat: Processing end Figures and Tables [18] (./Final-Manuscr
-ipt.aux)
+[13 <./Final-Manuscript_files/figure-latex/HB-FCT-model-1.pdf>] [14] [15] [16] 
+AED endfloat: Processing end Figures and Tables [17] (./Final-Manuscript.aux)
 Package rerunfilecheck Info: File `Final-Manuscript.out' has not changed.
-(rerunfilecheck)             Checksum: 420E377AAC0AE2F370D0B119FA078BC6;2761.
+(rerunfilecheck)             Checksum: F91A4ADCE6F5557BEC1DC9DEBEC81EB9;2564.
  ) 
 Here is how much of TeX's memory you used:
- 14457 strings out of 480954
- 217328 string characters out of 5906450
- 576598 words of memory out of 5000000
- 31312 multiletter control sequences out of 15000+600000
+ 14440 strings out of 480954
+ 217007 string characters out of 5906450
+ 567337 words of memory out of 5000000
+ 31301 multiletter control sequences out of 15000+600000
  441208 words of font info for 61 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  83i,11n,88p,2255b,489s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -831,10 +813,10 @@ Patrick/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/Patr
 ick/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></Users/Patrick/L
 ibrary/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb></Users/Patrick/Libr
 ary/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb>
-Output written on Final-Manuscript.pdf (18 pages, 191695 bytes).
+Output written on Final-Manuscript.pdf (17 pages, 186354 bytes).
 PDF statistics:
- 290 PDF objects out of 1000 (max. 8388607)
- 252 compressed objects within 3 object streams
- 84 named destinations out of 1000 (max. 500000)
- 178 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 277 PDF objects out of 1000 (max. 8388607)
+ 240 compressed objects within 3 object streams
+ 78 named destinations out of 1000 (max. 500000)
+ 170 words of extra memory for PDF output out of 10000 (max. 10000000)
 

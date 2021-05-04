@@ -30,6 +30,7 @@ linenumbers       : no
 linkcolor         : "blue"
 mask              : no
 draft             : no
+appendix          : ["appendix.Rmd"]
 classoption       : "man"
 output            : papaja::apa6_pdf
 ---
@@ -275,44 +276,6 @@ The results suggest that in production, preterit use is correlated with *less* f
 
 In contrast, receptive data from the FCT suggest that proficiency is the lone predictor for the use of preterit morphology with states, and that neither morphological regularity nor lexical frequency appeared to affect HB in their selectional preferences for aspect with state verbs. Proficiency and receptive tasks such as the FCT in the present study are thought to reflect speakers' competence, mitigating performance pressures that can surface in production [@perez-cortes_differential_2019]. Therefore, frequency may modulate the selection of morphological defaults due to performative challenges during production, while proficiency accounts for variability at the representational level. Consequently, the correlation between use of the preterit and proficiency in the interpretative domain is more reflective of speakers' knowledge of aspect morphology, while lexical frequency can be interpreted as evidence of performative difficulties in production.
 
----
-# Appendix: Statistical Results
-
-```{r, table-for-aggregate}
-Table_Aggregate <- broom.mixed::tidy(Aggregate_Model, conf.int = TRUE) %>% 
-  as_tibble() %>%
-  select(., -c(effect, group)) %>% 
-  rename(., Predictor = "term", Estimate = "estimate", SE = "std.error", z = "statistic", p = "p.value", CILower = "conf.low", CIUpper = "conf.high") %>% 
-  mutate(Predictor = recode(Predictor, `Frequency:Regularity:Proficiency` = "3-Way Interation")) %>% 
-  mutate(Predictor = recode(Predictor, TaskEAPT = "Task (EPT)"))
-
-Table_Aggregate[-c(10, 11),] %>% 
-  kable(align = 'lcccccc', caption = 'Table 3. Results of GLMM for aggregate model.')
-```
-
-```{r, create-EPT-table}
-Table_EPT <- broom.mixed::tidy(HB_EPT_Model, conf.int = TRUE) %>% 
-  as_tibble() %>%
-  select(., -c(effect, group)) %>% 
-  rename(., Predictor = "term", Estimate = "estimate", SE = "std.error", z = "statistic", p = "p.value", CILower = "conf.low", CIUpper = "conf.high") %>% 
-  mutate(Predictor = recode(Predictor, `Frequency:Regularity:Proficiency` = "3-Way Interation"))
-
-Table_EPT[-c(9, 10),] %>% 
-  kable(align = 'lcccccc', caption = 'Table 4. Results of GLMM for EPT.')
-```
-
-```{r, create-FCT-table}
-Table_FCT <- broom.mixed::tidy(HB_FCT_Model, conf.int = TRUE) %>% 
-  as_tibble() %>%
-  select(., -c(effect, group)) %>% 
-  rename(., Predictor = "term", Estimate = "estimate", SE = "std.error", z = "statistic", p = "p.value", CILower = "conf.low", CIUpper = "conf.high") %>% 
-  mutate(Predictor = recode(Predictor, `Frequency:Regularity:Proficiency` = "3-Way Interation"))
-
-Table_FCT[-c(9, 10),] %>% 
-  kable(align = 'lcccccc', caption = 'Table 5. Results of GLMM for FCT.')
-```
-
----
 # References
 
 \setlength{\parindent}{-0.5in}
