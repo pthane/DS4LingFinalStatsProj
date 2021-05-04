@@ -1,5 +1,5 @@
 ---
-title: "Morphological and Lexical Effects and Preterit Aspect Morphology with States"
+title: "Morphological and lexical effects on preterit aspect morphology with states in heritage bilinguals of Spanish"
 subtitle: "Final Project, Data Science for Linguists"
 author: "Patrick D. Thane"
 institute: "Rutgers University"
@@ -374,8 +374,7 @@ Pret_LI <- Preterit_Aggregate %>%
   scale_y_continuous(breaks = seq (0, 1, 0.2),
                      limits = c(0, 1)) +
   scale_x_discrete(labels = c("estar", "tener", "haber", "vivir", "gustar", "creer", "faltar", "amar", "doler", "excluir")) +
-  labs(x = "State verb (from most to least frequent)", y = "Proportion of preterit responses", color = "Task", 
-       title = "Preterit by State Verb, Task, and Regularity") +
+  labs(x = "State verb (from most to least frequent)", y = "Proportion of preterit responses", color = "Regularity", shape = "Task", title = "Preterit by State Verb, Task, and Regularity") +
   theme(axis.text = element_text(size = 16),
         axis.title = element_text(size = 18, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 24, face = "bold"))
