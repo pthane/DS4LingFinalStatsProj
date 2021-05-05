@@ -1,0 +1,33 @@
+```{r, table-for-aggregate-appendix}
+Table_Aggregate <- broom.mixed::tidy(Aggregate_Model, conf.int = TRUE) %>% 
+  as_tibble() %>%
+  select(., -c(effect, group)) %>% 
+  rename(., Predictor = "term", Estimate = "estimate", SE = "std.error", z = "statistic", p = "p.value", `CI-Lower` = "conf.low", `CI-Upper` = "conf.high") %>% 
+  mutate(Predictor = recode(Predictor, `Frequency:Regularity:Proficiency` = "3-Way Interation")) %>% 
+  mutate(Predictor = recode(Predictor, TaskEAPT = "Task (EPT)"))
+
+Table_Aggregate[-c(10, 11),] %>% 
+  kable(align = 'lcccccc', caption = 'Results of GLMM for aggregate model.')
+```
+
+```{r, create-EPT-table-appendix}
+Table_EPT <- broom.mixed::tidy(HB_EPT_Model, conf.int = TRUE) %>% 
+  as_tibble() %>%
+  select(., -c(effect, group)) %>% 
+  rename(., Predictor = "term", Estimate = "estimate", SE = "std.error", z = "statistic", p = "p.value", `CI-Lower` = "conf.low", `CI-Upper` = "conf.high") %>% 
+  mutate(Predictor = recode(Predictor, `Frequency:Regularity:Proficiency` = "3-Way Interation"))
+
+Table_EPT[-c(9, 10),] %>% 
+  kable(align = 'lcccccc', caption = 'Results of GLMM for EPT.')
+```
+
+```{r, create-FCT-table-appendix}
+Table_FCT <- broom.mixed::tidy(HB_FCT_Model, conf.int = TRUE) %>% 
+  as_tibble() %>%
+  select(., -c(effect, group)) %>% 
+  rename(., Predictor = "term", Estimate = "estimate", SE = "std.error", z = "statistic", p = "p.value", `CI-Lower` = "conf.low", `CI-Upper` = "conf.high") %>% 
+  mutate(Predictor = recode(Predictor, `Frequency:Regularity:Proficiency` = "3-Way Interation"))
+
+Table_FCT[-c(9, 10),] %>% 
+  kable(align = 'lcccccc', caption = 'Results of GLMM for FCT.')
+```

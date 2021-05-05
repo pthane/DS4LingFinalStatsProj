@@ -1,0 +1,291 @@
+---
+title             : "Morphological and Frequency Effects in Heritage Spanish and the Preterit with States"
+shorttitle        : "Morphological and frequency effects and the preterit"
+
+author: 
+  - name          : "Patrick D. Thane"
+    affiliation   : "1"
+    corresponding : no    # Define only one corresponding author
+    address       : "Department of Spanish and Portuguese, Rutgers University, Office 5184, 15 Seminary Place, New Brunswick, NJ 07649"
+    email         : "pthane@spanport.rutgers.edu"
+    role:   # Author
+
+affiliation       :
+  - id            : "1"
+    institution   : "Rutgers University"
+
+authornote: |
+  This manuscript has been prepared in fulfillment for the final project for Data Science for Linguists.
+abstract: |
+  This manuscript presents the methodology of a project evaluating Spanish heritage bilinguals' (HBs') use of preterit aspect with state verbs. In particular, it addresses how lexical frequency and morphological regularity affect the use of the preterit with state verbs in HBs' productive and receptive tendencies at different proficiency levels. A brief presentation of research questions and hypotheses begins the summary, followed by a review of the experiment and related methodologies. A summary of the statistics follows, and a brief overview of findings concludes this essay. This manuscript has been prepared using `papaja` and is in fulfillment of the final project for Data Science for Linguists.
+  
+keywords          : "`papaja`, heritage languages, preterit-imperfect, Spanish bilingualism"
+wordcount         : "X"
+
+bibliography      : ["references.bib", "r-references.bib"]
+
+appendix          : ["appendix.Rmd"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : no
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+```{r, run-packages, echo = FALSE, include = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+library(tidyverse)
+library(broom.mixed)
+library(lme4)
+library(sjPlot)
+library(papaja)
+library(kableExtra)
+library(citr)
+
+options(tinytex.verbose = TRUE)
+```
+
+```{r, generate-citations}
+r_refs(file = "r-references.bib")
+my_citation <- cite_r(file = "r-references.bib")
+```
+
+```{r, load-dataframes}
+HB_EPT <- read_csv("../Tidy Data/Heritage EPT Preterit Data.csv") %>% 
+  rename(., Frequency = "Token_Main_Std", Regularity = "Reg_Numerical", Proficiency = "DELE_Std")
+  
+HB_FCT <- read_csv("../Tidy Data/Heritage FCT Preterit Data.csv") %>%
+  rename(., Frequency = "Token_Main_Std", Regularity = "Reg_Numerical", Proficiency = "DELE_Std")
+
+HB_Composite <- read_csv("../Tidy Data/Heritage Aggregate Preterit Data.csv") %>% 
+    rename(., Frequency = "Token_Main_Std", Regularity = "Reg_Numerical", Proficiency = "DELE_Std")
+```
+
+```{r, generate-verb-averages}
+HB_EPT_Modified = aggregate(HB_EPT$Response, list(HB_EPT$MainVerb), FUN = mean, na.rm = TRUE)
+HB_EPT_Modified = HB_EPT_Modified %>% rename(Verb_Avg = x)
+HB_EPT_Modified = left_join(HB_EPT, HB_EPT_Modified, by = c("MainVerb" = "Group.1"))
+
+HB_FCT_Modified = aggregate(HB_FCT$Response, list(HB_FCT$MainVerb), FUN = mean, na.rm = TRUE)
+HB_FCT_Modified = HB_FCT_Modified %>% rename(Verb_Avg = x)
+HB_FCT_Modified = left_join(HB_FCT, HB_FCT_Modified, by = c("MainVerb" = "Group.1"))
+```
+
+```{r, generate-prof-averages}
+EPT_Proficiency = aggregate(HB_EPT$Response, list(HB_EPT$Participant_ID), FUN = mean, na.rm = TRUE)
+EPT_Proficiency = EPT_Proficiency %>% rename(Part_Avg = x)
+EPT_Proficiency = left_join(HB_EPT, EPT_Proficiency, by = c("Participant_ID" = "Group.1"))
+
+FCT_Proficiency = aggregate(HB_FCT$Response, list(HB_FCT$Participant_ID), FUN = mean, na.rm = TRUE)
+FCT_Proficiency = FCT_Proficiency %>% rename(Part_Avg = x)
+FCT_Proficiency = left_join(HB_FCT, FCT_Proficiency, by = c("Participant_ID" = "Group.1"))
+```
+
+```{r, rebind-verbavg-dataframes}
+Preterit_Aggregate = rbind(HB_EPT_Modified, HB_FCT_Modified)
+
+Preterit_Aggregate$Modality <- factor(Preterit_Aggregate$Modality,
+                                             levels = c("Production", "Interpretation"))
+
+Preterit_Proficiency <- rbind(EPT_Proficiency, FCT_Proficiency)
+
+Preterit_Proficiency$Modality <- factor(Preterit_Proficiency$Modality,
+                                           levels = c("Production", "Interpretation"))
+```
+
+# Research Questions
+1. Do HB prefer preterit inflections with states in a receptive measure more frequently than in production?
+2. Does lexical frequency affect HBs' production and selection of preterit morphology with state verbs?
+3. Do proficiency and morphological regularity modulate the effect of lexical frequency?
+
+# Hypotheses
+Regarding RQ1, it was predictable that HB would select the preterit with states in a receptive measure more frequently than they would produce this form, owing to asymmetrical productive and receptive capacities that are characteristic of heritage grammars [@perez-cortes_differential_2019]. With regards to RQ2, it was likely that lexical frequency would affect HB in both the production task and the receptive measure. Lastly, concerning RQ3, it was plausible that more-proficient HB would be less susceptible to the effects of lexical frequency in both tasks, especially in production. Furthermore, it was plausible that regular verbs would be more susceptible to frequency effects than irregular verbs in both tasks. This finding is attributable to past research that suggests that Spanish speakers store and access irregular verbs as full words, while regular stems are stored separately from their inflections [@bowden_verbal_2010].
+
+
+# Participants
+47 HB completed the study, all of whom were living in the northeastern United States at the time of data collection. None of these participants had received immersive bilingual schooling, and had received all of their secondary education in the United States. Participants' parents were from a total of twelve Spanish-speaking countries and territories. Participants reported first exposure to English between birth and age seven.
+
+# Materials
+## Biographical Measures
+The present study contained two biographical measures and two experimental tasks. The first biographical measure was the language experience questionnaire, which solicited each participant’s age of acquisition of English and Spanish, national origin, length of residence overseas, and extent of formal instruction in Spanish. In addition, the questionnaire contained ten five-point Likert scales concerning how frequently participants used Spanish across five contexts (at home, at work, in coursework, with friends, and with family members), with one scale for comprehension and a separate scale for production in each context. The final part of the questionnaire contained a frequency and translation measure adapted from @hur_gender_2020. In this section, there was a nine-point Likert scale for each of the lexical items used in the experimental tasks of this study in which participants needed to report the frequency of production of individual words. This procedure verified that the lexical frequencies of verbs from the @davies_corpus_2016 corpus aligned with HBs’ use of and familiarity with these items. Furthermore, each participant needed to translate each of the verbs used in the experimental tasks to demonstrate familiarity with these items. In addition to the biographical questionnaire, each participant completed a 50-item written Spanish proficiency measure [@montrul_competence_2003].
+
+## Experimental Tasks
+The present study used the @davies_corpus_2016 corpus to measure lexical frequency, reporting the lemma frequencies of ten state verbs selected for the experimental tasks. Lemma frequencies encompass the total number of tokens of all derived forms of a particular lexical item, therefore providing a metric of the sum of how frequently all permutations of person, number, tense, aspect, mood, and impersonal forms of a particular verb are used. To maintain morphophonological consistency, all verbs were disyllabic. Five verbs were morphologically regular, while the remaining five were  irregular. Both sets of verbs represented a continuum of lexical frequency, such that it was possible to address lexical frequency and morphological regularity distinctly. Table 1 lists these verbs and their lexical frequencies.
+
+```{r, generate-states-table}
+read.csv("../Raw Data/State Verbs Table.csv") %>% 
+  as_tibble() %>% 
+  rename(., Regulars = "Regulares", Tokens = "Tokens", Irregulars = "Irregulares") %>% 
+  kable(align = "lclc")
+```
+**Table 1.** Verbs and their lexical frequencies as reported in Davies (2016).
+
+Because HB often exhibit distinct productive and receptive knowledge of the heritage language [@perez-cortes_differential_2019], the present study incorporated two similarly-structured experimental tasks. Each task contained 50 experimental items, of which 20 pertained to preterit aspect with states and 30 were distractors. The twenty preterit items were organized into four conditions with five stimuli each. Conditions followed a 2 x 2 design based upon morphological regularity and type of adverbial (*durante* and *entre*). Therefore, each of the state verbs in Table 1 appeared once with a prepositional phrase headed by *durante* (for) and once with an prepositional phrase headed by *entre* (between). As @de_swart_aspect_1998 describes, these prepositions force a perfective interpretation and are expected to “coerce” state verbs, which are naturally associated with the imperfect, into the preterit. The 30 items consisted of 25 distractors targeting mood morphology and five fillers expected to elicit imperfect morphology with states. Although the imperfect fillers did not form part of statistical analyses, they acted as verification that participants were able to use both perfective and imperfective morphology in the past. Lack of suppliance of imperfect could signify the loss of the aspectual distinction, such that it would be impossible to discern whether participants were using the preterit as a tense marker for all past forms or as a true marker of perfective aspect.
+
+### Elicited Production Task (EPT)
+The first task was a multimodal elicited production task (EPT), in which participants heard and read a four-sentence description to contextualize each response and needed to complete a sentence fragment using a form of the verb written in parentheses. The first two sentences in the description included bounded events in the preterit, while the third sentence contained a verb carrying imperfect morphology that provided background information. The final sentence provided instructions to the participants. Examples (1) and (2) below were experimental items from the EPT.
+
+1. Daniel llegó a Paris en 2015. Se fue en 2019. Le gustaba mucho vivir allí. Describe su tiempo en París. Durante 4 años… [vivir].
+
+2.	A las 2:43 la tierra empezó a temblar. Dejó de sacudir a las 2:48. Paco estaba preocupado por el temblor. Describe la duración del terremoto. Entre las 2:43 y las 2:48… [haber].
+
+### Forced Choice Task (FCT)
+In the forced choice task (FCT), participants again heard 50 sentences following the same structure as the EPT. Instead of completing the sentence fragment, participants heard and read two single-sentence choices. The two choice sentences were identical with the exception that one option contained a verb with preterit markings, and the other carried imperfect markings. Sentences (3) and (4) are examples from the FCT.
+
+3. Renata salió para Londres el domingo pasado. Regresó a Barcelona el sábado. Viajaba mucho para su trabajo. [Estuvo/*estaba] en Londres durante 6 días.
+
+4.	Esteban recibió una oferta de trabajo el lunes. Después, rechazó la oferta el viernes. Conseguía muchas ofertas en su juventud. [Tuvo/*tenía] oferta de trabajo durante 3 días.
+
+# Procedure
+Data collection took place online to accommodate the social distancing guidelines of the coronavirus pandemic concurrent with the present study. Participants signed the IRB consent form and completed the biographical and frequency questionnaire followed by the the DELE proficiency measure independently before data collection, which required approximately 30 minutes in total. Subsequently, the researcher administered the EPT followed by the FCT over Zoom videoconferencing software, which required approximately 45 minutes. The total study duration was approximately 75 minutes. Participants either received course credit or compensation for their participation in the study.
+
+# Data Coding and Variables
+Three generalized linear mixed methods (GLMM) models were carried out to evaluate the research questions using `r cite_r("r-references.bib")`. An aggregate model was carried out on data from both tasks, through which it was possible to address the predicted asymmetries between production and interpretation. The second two models evaluated the production and interpretation data, respectively. In each of the models, the criterion was the binary suppliance of the preterit. Production of the preterit resulted in a value of "1," while production of alternative past tense forms received a value of "0."  Because it was not possible to determine the impact of lexical frequency on preterit production through the use of modal constructions (that is, whether it was the modal verb or the lexical verb that lead to the use of a particular inflection), periphrastic constructions were eliminated from the data. Furthermore, because it is not possible to distinguish between tense and aspect marking in Spanish nonpast forms, any responses in the present tense were not coded, because the aspectual contrast is exclusive to the past tense and is not represented in the present. Although @schwieter_chapter_2013 report that the present simple is imperfective by definition, and may emerge as an "avoidance strategy" for the imperfect, it is not possible to extrapolate whether participants wish to mark tense or aspect when using nonpast forms.
+
+There were four predictors in the present study: task (in the aggregate model only; either EPT or FCT), proficiency (the number of correct responses on the 50-question proficiency measure), lexical frequency (the lemma frequency of each state verb in the @davies_corpus_2016 corpus), and morphological regularity (irregular or regular). Therefore, task and regularity formed binary predictors, while proficiency and lexical frequency comprised continuous variables, both of which were standardized prior to analysis. The models also included all two- and three-way interactions between lexical frequency, morphological regularity, and proficiency level. Participant and item were included as random effects.
+
+## Descriptive Data
+Figure 1 provides a summary of the average level of use of the preterit with each state verb across participants in both production (EPT) and interpretation (FCT). This summary suggests that with participants' proficiency held constant, it appears (a) that HB were more likely to select the preterit in the FCT than they were to produce this form in the EPT and (b) that production of preterit forms appeared to increase as lexical frequency decreased, which differs from previous findings on lexical frequency [@brehmer_not_2020; @hur_gender_2020]. Moreover, Figure 2 presents each participant's proportion of preterit use in each task as a function of proficiency. It appeared that proficiency had a more facilitative effect in interpretation of preterit morphology than in production. Taken together, these findings may signal that overall command of Spanish correlates with performance in the receptive FCT, which has lower task demands, while lexical frequency may affect performance due to the difficulty of production.
+
+```{r, Pret-LI-graph}
+Preterit_Aggregate %>%
+  ggplot(aes(x = MainVerb, y = Response, color = Reg_Main, shape = Modality)) + 
+  stat_summary(fun.data = mean_se,
+               geom = "pointrange", size = 1, 
+               position = position_dodge(width = 0.5)) + 
+  scale_color_brewer(palette = "Set1", name = "") +
+  scale_y_continuous(breaks = seq (0, 1, 0.2),
+                     limits = c(0, 1)) +
+  scale_x_discrete(labels = c("estar", "tener", "haber", "vivir", "gustar", "creer", "faltar", "amar", "doler", "excluir")) +
+  labs(x = "State verb (from most to least frequent)", y = "Proportion of preterit responses", color = "Verb", shape = "Task", title = "Preterit by State Verb, Task, and Regularity", caption = "Figure 1. Average use of preterit with state items by task and regularity.") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r, generate-prof-plot}
+Preterit_Proficiency %>% 
+  ggplot(aes(x = DELE, y = Part_Avg)) + 
+  geom_point() +
+  geom_smooth(method = glm) +
+  facet_grid(cols = vars(Modality)) +
+  scale_y_continuous(breaks = seq (0, 1, 0.2),
+                     limits = c(0, 1)) +
+  labs(x = "DELE proficiency score", y = "Proportion of preterit responses by participant", title = "Proportion of Preterit by Task and Profociency", caption = "Figure 2. Preterit by proficiency level and task.") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+## Statistical Models
+Results of the three GLMMs carried out in *R* studio for statistical computing are reported below. The Appendix provides statistical figures, and Figures 3 through 5 provide visual summaries of each model.
+
+### Aggregate Results
+Results in the aggregate model included 1,774 observations. 106 observations (5.6%) were removed in instances in which participants did not respond to the prompt, did not use a conjugated form of the listed state verb, or produced nonpast forms. Findings revealed a main effect for task (*B* = -0.7464, *p* = .0048) and for lexical frequency (*B* = -0.4925, *p* = .0028), as predicted. However, there were no effects for lexical frequency or morphological regularity at the *p* < 0.05 level, contra the hypotheses. Figure 2 summarizes the results of the aggregate model.
+
+```{r, aggregate-model}
+Aggregate_Model <- glmer(Response ~ Task + Frequency * Regularity * Proficiency +
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HB_Composite,
+                 family = "binomial",
+                 control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=3e5)))
+
+plot_model(Aggregate_Model, show.values = TRUE, value.offset = .3, show.intercept = TRUE, transform = NULL, vline.color = "black") +
+  scale_x_discrete(labels = c("LF : Reg : DELE", "Reg : DELE", "LF : Prof", "LF : Reg", "Proficiency", "Regularity", "Lexical Frequency", "Task", "Intercept")) +
+  labs(title = "Aggregate Model", y = "Parameter Estimates", caption = "Figure 3. Results of aggregate model.") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+### Production Results
+Results in the EPT included 863 observations. 77 observations (8.1%) were removed in instances in which participants either substituted a present tense form or used a modal construction. Findings revealed a negative main effect for lexical frequency (*B* = -0.8032, *p* = .0004) and an interaction between proficiency and lexical frequency (*B* = 0.3097, *p* = .0055). There was no effect for the interaction between lexical frequency and morphological regularity at the *p* < 0.05 level, contra the hypotheses. Note that although the effect for lexical frequency was part of the predictions, the *negative* nature of this correlation suggests a decrease in the productivity of preterit morphology with the most frequent state verbs. Figure 3 summarizes the results of the production model.
+
+```{r, HB-EPT-model}
+HB_EPT_Model <- glmer(Response ~ Frequency * Regularity * Proficiency +
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HB_EPT,
+                 family = binomial,
+                 control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=3e5)))
+
+plot_model(HB_EPT_Model, show.values = TRUE, value.offset = .3, show.intercept = TRUE, transform = NULL, vline.color = "black") +
+  scale_x_discrete(labels = c("LF : Reg : DELE", "Reg : DELE", "LF : Prof", "LF : Reg", "Proficiency", "Regularity", "Lexical Frequency", "Intercept")) +
+    labs(title = "Production (EPT)", y = "Parameter Estimates", caption = "Figure 4. Results of EPT model.") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+### FCT Results
+Results in the FCT included 911 observations. 29 observations (3%) were removed in instances in which participants did not make a selection between either inflection. Findings revealed a main effect for proficiency (*B* = 0.395, *p* = 0.0306); however, there were no effects for lexical frequency or for morphological regularity at the *p* < 0.05 level, contra the hypotheses. Figure 4 summarizes the results of the FCT.
+
+```{r, HB-FCT-model}
+HB_FCT_Model <- glmer(Response ~ Frequency * Regularity * Proficiency +
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HB_FCT,
+                 family = binomial,
+                 control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun=3e5)))
+
+plot_model(HB_FCT_Model, show.values = TRUE, value.offset = .3, show.intercept = TRUE, transform = NULL, vline.color = "black") +
+  scale_x_discrete(labels = c("LF : Reg : DELE", "Reg : DELE", "LF : Prof", "LF : Reg", "Proficiency", "Regularity", "Lexical Frequency", "Intercept")) +
+  labs(title = "Interpretation (FCT)", y = "Parameter Estimates", caption = "Figure 5. Results of FCT model.") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+## Nested model comparisons for production
+To evaluate the validity of the statistical interaction between proficiency and lexical frequency in production, it was necessary to conduct a nested model comparison of fixed effects in the EPT model. Effects in Table 2 where *p* < 0.05 accounted for variance in production of the preterit with states. The effect for token frequency, as well as the interaction between proficiency and token frequency, both obtained values where *p* < 0.05, supporting the findings that more-proficient HB are less susceptible to the impact of lexical frequency in the production of preterit morphology with states, but that less-frequent verbs are more likely to receive preterit inflections in production.
+
+```{r, NMC-generate, include = FALSE}
+EPT_Null <- glmer(Response ~ 1 + 
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HB_EPT,
+                 family = binomial)
+
+EPT_TF <- glmer(Response ~ 1 + Frequency +
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HB_EPT,
+                 family = binomial)
+
+EPT_Reg <- glmer(Response ~ 1 + Frequency + Regularity +
+                   (1 | Participant_ID) + (1 | Item),
+                 data = HB_EPT,
+                 family = binomial)
+
+EPT_DELE <- glmer(Response ~ 1 + Frequency + Regularity + Proficiency +
+                    (1 | Participant_ID) + (1 | Item),
+                     data = HB_EPT,
+                     family = binomial)
+
+EPT_TF_Reg <- glmer(Response ~ 1 + Frequency + Regularity + Proficiency + Frequency:Regularity +
+                    (1 | Participant_ID) + (1 | Item),
+                     data = HB_EPT,
+                     family = binomial)
+
+EPT_TF_DELE <- glmer(Response ~ 1 + Frequency + Regularity + Proficiency + Frequency:Regularity + Frequency:Proficiency +
+                    (1 | Participant_ID) + (1 | Item),
+                     data = HB_EPT,
+                     family = binomial)
+
+
+NMC_Output <- anova(EPT_Null, EPT_TF, EPT_Reg, EPT_DELE, EPT_TF_Reg, EPT_TF_DELE, test = "Chisq")
+```
+
+```{r, generate-NMC-output}
+as_tibble(NMC_Output) %>% 
+  rename(., Factors = "npar", Akaike = "AIC", Bayesian = "BIC", Likelihood = "logLik", Deviance = "deviance", Chisquare = "Chisq", DF = "Df", p = "Pr(>Chisq)") %>% 
+  select(., -c(Factors)) %>% 
+  add_column(Model = c("Intercept", "Frequency", "Regularity", "Proficiency", "Freq:Reg", "Freq:Prof"), .before = "Akaike") %>% 
+  kable(align = "lcccccccc")
+```
+
+## Summary
+
+The results suggest that in production, preterit use is correlated with *less* frequent verbs. Such findings point to morphological defaults, which is consistent with previous literature (e.g, @silva-corvalan_language_1994 for longitudinal data on the simplification of verbal morphology in Spanish HB). English lacks an aspectual contrast; therefore, following @giorgi_tense_1997's analysis, English instantiates the [+perfective] feature that is associated with the Spanish preterit, but does not mark [-perfective] forms distinctly. As a result, the preterit can be interpreted as the "unmarked" form [@mccarthy_underspecification_2004], and may act as a default marker for all past tense forms either when it is too cognitively taxing to retrieve the imperfect under performative pressures or as a result of the restructuring of the aspect system in bilingual grammars at the representational level. However, the use of states is strongly associated with imperfect morphology, even where the preterit would be preferred with eventive predicates [@schwieter_chapter_2013; @montrul_incomplete_2002; @potowski_tense_2005; @silva-corvalan_language_1994], including in monolingual varieties [@wulff_acquisition_2009]. Therefore, the use of perfective aspect may surface as a default or "elsewhere form" in infrequently-used states under the pressures of production, while the imperfect-state relationship remains in place at high levels of lexical frequency. Only those HB who have higher proficiency in Spanish appear to be able to "override" the defaults for preterit and imperfective morphology respectively, attending instead to the coercive nature of the adverbials *durante* and *entre*, which signal a perfective interpretation. Despite the interrelatedness of proficiency and lexical frequency as predictors of defaults in production, there was no role for morphological regularity in the present study.
+
+In contrast, receptive data from the FCT suggest that proficiency is the lone predictor for the use of preterit morphology with states, and that neither morphological regularity nor lexical frequency appeared to affect HB in their selectional preferences for aspect with state verbs. Proficiency and receptive tasks such as the FCT in the present study are thought to reflect speakers' competence, mitigating performance pressures that can surface in production [@perez-cortes_differential_2019]. Therefore, frequency may modulate the selection of morphological defaults due to performative challenges during production, while proficiency accounts for variability at the representational level. Consequently, the correlation between use of the preterit and proficiency in the interpretative domain is more reflective of speakers' knowledge of aspect morphology, while lexical frequency can be interpreted as evidence of performative difficulties in production.
+
+\newpage
+
+# References
+
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
